@@ -48,7 +48,7 @@ Cameraslide::Cameraslide()
   stepper->setMicrostep(1); //Full step
   
 
-  //Check if all parameters 
+  //Check if all parameters are OK
   _parametersOk = 1;
 }
 
