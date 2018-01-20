@@ -7,11 +7,9 @@ Cameraslide::Cameraslide()
 {
   _motorSteps = 200 / 10; //actual motor steps / 10 to go below 1 rpm (this is because of restrictions in stepper library)
   _motorRevolutions = 22;
-
   _stepPin = 10;
   _directionPin = 11;
   _enablePin = 12;
-  
   _startSwitch = 6;
   _endSwitch = 7;
   _hours = 0;
@@ -21,19 +19,13 @@ Cameraslide::Cameraslide()
   _shutterSpeed = 1;
   _pauseBeforePicture = 2;
   _pauseAfterPicture = 0.5;
-  
   _cycleTime = 600;
-  
   _interval = 10;
-  
-  
   _nonStop = 0;
-  
   _focusTimer = 100;
   _pictureTimer = 100; //ms to push down camera button
   _takePicPin = 13;
   _focusPin = 9;
-
 
   _totalStepsPerCycle = _motorSteps * _motorRevolutions;
   _totalPauseTime = _pauseBeforePicture + _shutterSpeed + _pauseAfterPicture + (_focusTimer * 0.001) + (_pictureTimer * 0.001);
@@ -41,7 +33,7 @@ Cameraslide::Cameraslide()
   _totalDriveTimePerCycle = _cycleTime - _totalPauseTimePerCycle;
   _motorRPM = _motorRevolutions / (_totalDriveTimePerCycle / 60.0);
 
-	stepper = new BasicStepperDriver(_motorSteps, _directionPin, _stepPin, _enablePin);
+  stepper = new BasicStepperDriver(_motorSteps, _directionPin, _stepPin, _enablePin);
   stepper->setMicrostep(1); //Full step
   
   pinMode(_startSwitch, INPUT);
@@ -125,7 +117,6 @@ void Cameraslide::setDirection(boolean dir) {
     digitalWrite(_directionPin, LOW);
 	Serial.print("CCW");
   }
-  
 }
 
 void Cameraslide::setShutterSpeed(int shutterSpeed) {
@@ -210,14 +201,8 @@ void Cameraslide::checkPictureTimer() {
 
 void Cameraslide::takePicture() {
   Serial.println("focus");
-  //int timer = 2000;
-  //_currentMillis = millis();
   _lastPicMillis = millis();
-  //while (_currentMillis + timer > millis()) {
   digitalWrite(_focusPin, HIGH);
-  //}
-  //digitalWrite(13, LOW);
-  //Serial.println("picture slut");
   _currentMillis = millis();
 
   while (digitalRead(_focusPin)) {
