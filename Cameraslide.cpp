@@ -5,13 +5,25 @@
 
 Cameraslide::Cameraslide()
 {
+  //Stepper motor setup
   _motorSteps = 200 / 10; //actual motor steps / 10 to go below 1 rpm (this is because of restrictions in stepper library)
-  _motorRevolutions = 22;
-  _stepPin = 10;
+  _motorRevolutions = 22; //Revolutions from start to end of the slide
+  
+  //I/O configuration
+  _stepPin = 10; 
   _directionPin = 11;
   _enablePin = 12;
   _startSwitch = 6;
   _endSwitch = 7;
+  _takePicPin = 13;
+  _focusPin = 9;
+  
+  pinMode(_startSwitch, INPUT);
+  pinMode(_endSwitch, INPUT);
+  pinMode(_takePicPin, OUTPUT);
+  pinMode(_focusPin, OUTPUT);
+  
+  //Recipe
   _hours = 0;
   _minutes = 10;
   _seconds = 0;
@@ -24,9 +36,8 @@ Cameraslide::Cameraslide()
   _nonStop = 0;
   _focusTimer = 100;
   _pictureTimer = 100; //ms to push down camera button
-  _takePicPin = 13;
-  _focusPin = 9;
 
+  //Math to calculate slide behaviour from recipe
   _totalStepsPerCycle = _motorSteps * _motorRevolutions;
   _totalPauseTime = _pauseBeforePicture + _shutterSpeed + _pauseAfterPicture + (_focusTimer * 0.001) + (_pictureTimer * 0.001);
   _totalPauseTimePerCycle = (_cycleTime / _interval) * _totalPauseTime;
@@ -36,11 +47,8 @@ Cameraslide::Cameraslide()
   stepper = new BasicStepperDriver(_motorSteps, _directionPin, _stepPin, _enablePin);
   stepper->setMicrostep(1); //Full step
   
-  pinMode(_startSwitch, INPUT);
-  pinMode(_endSwitch, INPUT);
-  pinMode(_takePicPin, OUTPUT);
-  pinMode(_focusPin, OUTPUT);
-  
+
+  //Check if all parameters 
   _parametersOk = 1;
 }
 
